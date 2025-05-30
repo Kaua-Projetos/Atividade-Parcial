@@ -1,0 +1,54 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-exchange-alt me-2"></i>Nova Movimentação de Estoque
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">
+                            {% if field.name == 'item' %}
+                                <i class="fas fa-box me-2"></i>
+                            {% elif field.name == 'tipo' %}
+                                <i class="fas fa-exchange-alt me-2"></i>
+                            {% elif field.name == 'quantidade' %}
+                                <i class="fas fa-cubes me-2"></i>
+                            {% elif field.name == 'observacao' %}
+                                <i class="fas fa-comment me-2"></i>
+                            {% endif %}
+                            {{ field.label }}
+                        </label>
+                        {{ field.errors }}
+                        {{ field }}
+                        {% if field.help_text %}
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            {{ field.help_text }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save me-2"></i>Registrar Movimentação
+                        </button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i>Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

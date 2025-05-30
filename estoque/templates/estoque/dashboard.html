@@ -1,0 +1,107 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+<div class="row mb-4 dashboard-header">
+    <div class="col">
+        <h2><i class="fas fa-chart-line me-2"></i>Dashboard de Estoque</h2>
+    </div>
+    <div class="col text-end">
+        <a href="{% url 'item_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Novo Item
+        </a>
+        <a href="{% url 'movimentacao_create' %}" class="btn btn-success">
+            <i class="fas fa-exchange-alt"></i> Nova Movimentação
+        </a>
+    </div>
+</div>
+
+{% if itens_baixo_estoque %}
+<div class="alert alert-warning">
+    <h4><i class="fas fa-exclamation-triangle me-2"></i>Itens com Estoque Baixo</h4>
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th><i class="fas fa-box me-2"></i>Item</th>
+                    <th><i class="fas fa-cubes me-2"></i>Quantidade Atual</th>
+                    <th><i class="fas fa-exclamation-circle me-2"></i>Estoque Mínimo</th>
+                    <th><i class="fas fa-cog me-2"></i>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in itens_baixo_estoque %}
+                <tr>
+                    <td>{{ item.nome }}</td>
+                    <td>{{ item.quantidade_atual }}</td>
+                    <td>{{ item.estoque_minimo }}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="{% url 'item_update' item.pk %}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'item_delete' item.pk %}" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-boxes me-2"></i>Todos os Itens
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-box me-2"></i>Nome</th>
+                        <th><i class="fas fa-barcode me-2"></i>Código</th>
+                        <th><i class="fas fa-map-marker-alt me-2"></i>Localização</th>
+                        <th><i class="fas fa-cubes me-2"></i>Quantidade</th>
+                        <th><i class="fas fa-exclamation-circle me-2"></i>Estoque Mínimo</th>
+                        <th><i class="fas fa-dollar-sign me-2"></i>Preço Unitário</th>
+                        <th><i class="fas fa-cog me-2"></i>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in itens %}
+                    <tr {% if item.quantidade_atual <= item.estoque_minimo %}class="table-warning"{% endif %}>
+                        <td>{{ item.nome }}</td>
+                        <td>{{ item.codigo_referencia }}</td>
+                        <td>{{ item.localizacao }}</td>
+                        <td>{{ item.quantidade_atual }}</td>
+                        <td>{{ item.estoque_minimo }}</td>
+                        <td>R$ {{ item.preco_unitario }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'item_update' item.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'item_delete' item.pk %}" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <i class="fas fa-info-circle me-2"></i>Nenhum item cadastrado.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %} 
