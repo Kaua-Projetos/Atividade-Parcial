@@ -62,7 +62,7 @@ class MovimentacaoEstoqueView(CreateView):
         
         if movimentacao.tipo == 'ENTRADA':
             item.quantidade_atual += movimentacao.quantidade
-        else:  # SAIDA
+        else:
             if item.quantidade_atual < movimentacao.quantidade:
                 messages.error(self.request, 'Quantidade insuficiente em estoque!')
                 return self.form_invalid(form)
